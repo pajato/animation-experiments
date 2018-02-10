@@ -25,6 +25,7 @@ class SecondaryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun animate(view: View) {
         // reveal views
         isOpen = !isOpen
@@ -113,6 +114,7 @@ class SecondaryActivity : AppCompatActivity() {
         return if (isOpen) View.VISIBLE else View.GONE
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun transitionActivity(view: View) {
         val intent = Intent(this, DrawerActivity::class.java)
 

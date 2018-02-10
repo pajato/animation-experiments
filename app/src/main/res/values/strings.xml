@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">DrawerReplacement</string>
+    <string name="chevronStates">Open or closed chevron.</string>
+    <string name="the_main_content">The Main Content</string>
+    <string name="song_title">Song Title</string>
+    <string name="background">Background</string>
+    <string name="previous">previous</string>
+    <string name="play">play</string>
+    <string name="next">next</string>
+    <string name="animate">Animate</string>
 </resources>

@@ -64,12 +64,12 @@
             android:id="@+id/previousMain"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:alpha="0"
             android:contentDescription="@string/previous"
             android:src="@drawable/ic_chevron_left_black_24dp"
-            app:layout_constraintBottom_toTopOf="@id/seekbarLayoutMain"
+            app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
             app:layout_constraintEnd_toStartOf="@id/playButtonMain"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/playButtonMain"
             app:layout_constraintVertical_bias="0.7" />
 
         <ImageView
@@ -89,12 +89,12 @@
             android:id="@+id/nextMain"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:alpha="0"
             android:contentDescription="@string/next"
             android:src="@drawable/ic_chevron_right_black_24dp"
-            app:layout_constraintBottom_toTopOf="@id/seekbarLayoutMain"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
             app:layout_constraintStart_toEndOf="@id/playButtonMain"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/playButtonMain"
             app:layout_constraintVertical_bias="0.7" />
 
         <android.support.constraint.ConstraintLayout

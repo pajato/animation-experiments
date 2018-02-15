@@ -8,13 +8,17 @@ import android.util.TypedValue
 import android.view.View
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_slide.*
+import kotlinx.android.synthetic.main.activity_drawer.*
 
 class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListener {
     override fun onPanelSlide(panel: View, slideOffset: Float) {
         val cs = ConstraintSet()
         cs.clone(mainPanel)
-        cs.setVerticalBias(R.id.playButtonMain, slideOffset * 0.7f)
-        cs.setHorizontalBias(R.id.playButtonMain, (1.0f - slideOffset * 0.5f))
+        cs.setVerticalBias(R.id.playButtonMain, (0.015f + slideOffset * 0.735f))
+        cs.setHorizontalBias(R.id.playButtonMain, (0.98f - slideOffset * 0.48f))
+        cs.setHorizontalBias(R.id.songDurationMain, slideOffset * 0.5f)
+        cs.setVerticalBias(R.id.songTitleMain, (0.02f + slideOffset * 0.31f))
+        cs.setHorizontalBias(R.id.songTitleMain, (0.05f + slideOffset * 0.45f))
         cs.applyTo(mainPanel)
 
         previousMain.alpha = slideOffset
@@ -27,11 +31,24 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         marginStart.leftMargin = dpToPx(50 * slideOffset)
         nextMain.layoutParams = marginStart
 
+        soundsTextMain.alpha = slideOffset
+
+        val params = playButtonMain.layoutParams
+        params.width = dpToPx(48 + slideOffset * 24.0f)
+        params.height = dpToPx(48 + slideOffset * 24.0f)
+
+        songDurationMain.textSize = (14.0f + (slideOffset * 2.0f))
+        songTitleMain.textSize = (16.0f + (slideOffset * 16.0f))
+
         chevronClick.rotation = 270 - (180 * slideOffset)
     }
 
     override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+        if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
 
+        } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

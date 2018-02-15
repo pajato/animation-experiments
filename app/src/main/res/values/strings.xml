@@ -8,4 +8,6 @@
     <string name="play">play</string>
     <string name="next">next</string>
     <string name="animate">Animate</string>
+    <string name="playing_all_night">Playing for a bit</string>
+    <string name="sounds">Sounds</string>
 </resources>

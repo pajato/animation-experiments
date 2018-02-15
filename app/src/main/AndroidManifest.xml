@@ -18,8 +18,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DrawerActivity" />
-
     </application>
 
 </manifest>

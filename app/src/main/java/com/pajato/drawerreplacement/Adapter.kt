@@ -1,6 +1,5 @@
 package com.pajato.drawerreplacement
 
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +7,12 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_view.view.*
 
 class Adapter : RecyclerView.Adapter<Adapter.VH>() {
-    private var items = listOf(android.R.color.holo_blue_dark,
-            android.R.color.holo_green_dark,
-            android.R.color.holo_orange_dark)
+    private var items = listOf(R.drawable.gradient_blue,
+            R.drawable.gradient_green,
+            R.drawable.gradient_red)
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.layout.item_background.setColorFilter(ContextCompat.getColor(holder.layout.context, items[position]))
+        holder.layout.item_background.setImageResource(items[position])
     }
 
     override fun getItemCount(): Int {

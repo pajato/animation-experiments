@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_slide.*
 import kotlinx.android.synthetic.main.activity_drawer.*
 
 class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListener {
-    var manager: LinearLayoutManager = LinearLayoutManager(this)
+    lateinit var recyclerViewManager: RecyclerViewManager
 
     override fun onPanelSlide(panel: View, slideOffset: Float) {
         val cs = ConstraintSet()
@@ -60,30 +60,28 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         setContentView(R.layout.activity_slide)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         slidingPanel.addPanelSlideListener(this)
 
         // Setup RecyclerView.
         horizontalSlider.setHasFixedSize(true)
-        manager.orientation = LinearLayoutManager.HORIZONTAL
-        horizontalSlider.layoutManager = manager
-        horizontalSlider.adapter = Adapter()
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        horizontalSlider.layoutManager = layoutManager
+
+        val adapter = Adapter()
+        horizontalSlider.adapter = adapter
 
         val helper = PagerSnapHelper()
         helper.attachToRecyclerView(horizontalSlider)
-        horizontalSlider.addOnScrollListener(HandleScrollButtons(nextMain, previousMain))
+        recyclerViewManager = RecyclerViewManager(this.mainPanel, adapter, layoutManager)
+        horizontalSlider.addOnScrollListener(recyclerViewManager)
+        recyclerViewManager.updateSongInformation(0)
     }
 
     fun changeSong(view: View) {
-        val pos = manager.findFirstCompletelyVisibleItemPosition()
-        val smoothScroller = SmoothScroller(this)
-        smoothScroller.targetPosition = when (view.id) {
-            R.id.nextMain -> pos + 1
-            R.id.previousMain -> pos - 1
-            else -> pos
-        }
-        manager.startSmoothScroll(smoothScroller)
+        recyclerViewManager.changeSong(view)
     }
 
     private fun dpToPx(dp: Float): Int {

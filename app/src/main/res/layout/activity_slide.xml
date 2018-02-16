@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoPanelHeight="64dp"
-    sothree:umanoShadowHeight="4dp">
+    sothree:umanoShadowHeight="4dp"
+    sothree:umanoScrollableView="@id/horizontalSlider" >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

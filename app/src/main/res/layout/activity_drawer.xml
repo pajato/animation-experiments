@@ -3,7 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainPanel"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/horizontalSlider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="58dp"
+        android:layout_marginTop="72dp"
+        android:orientation="horizontal">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <View
+        android:id="@+id/pane_background"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/background_dark"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/chevronClick"
@@ -14,6 +36,7 @@
         android:contentDescription="@string/chevronStates"
         android:rotation="270"
         android:src="@drawable/ic_chevron_right_black_24dp"
+        android:tint="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,38 +58,33 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:text="@string/sounds"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.025" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/background"
-        android:src="@drawable/ic_image_black_24dp"
-        android:tint="@android:color/holo_orange_light" />
+        app:layout_constraintBottom_toBottomOf="@id/pane_background"
+        app:layout_constraintEnd_toEndOf="@id/pane_background"
+        app:layout_constraintStart_toStartOf="@id/pane_background"
+        app:layout_constraintTop_toTopOf="@id/pane_background" />
 
     <TextView
         android:id="@+id/songTitleMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/song_title"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/spacer"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@id/chevronClick"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.017" />
 
     <TextView
         android:id="@+id/songDurationMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playing_all_night"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/songTitleMain"
         app:layout_constraintHorizontal_bias="0.0"
@@ -79,7 +97,9 @@
         android:layout_height="40dp"
         android:alpha="0"
         android:contentDescription="@string/previous"
+        android:onClick="changeSong"
         android:src="@drawable/ic_chevron_left_black_24dp"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
         app:layout_constraintEnd_toStartOf="@id/playButtonMain"
         app:layout_constraintTop_toTopOf="@id/playButtonMain"
@@ -91,6 +111,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/play"
         android:src="@drawable/ic_play_arrow_black_24dp"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/seekbarLayoutMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.98"
@@ -104,7 +125,9 @@
         android:layout_height="40dp"
         android:alpha="0"
         android:contentDescription="@string/next"
+        android:onClick="changeSong"
         android:src="@drawable/ic_chevron_right_black_24dp"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
         app:layout_constraintStart_toEndOf="@id/playButtonMain"
         app:layout_constraintTop_toTopOf="@id/playButtonMain"
@@ -119,8 +142,7 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:background="@drawable/background"
             android:paddingBottom="16dp"
             android:paddingTop="16dp" />
 

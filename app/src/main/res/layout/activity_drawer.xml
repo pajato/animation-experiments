@@ -10,8 +10,7 @@
         android:id="@+id/horizontalSlider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="58dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginBottom="56dp"
         android:orientation="horizontal">
 
     </android.support.v7.widget.RecyclerView>
@@ -20,6 +19,7 @@
         android:id="@+id/pane_background"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:alpha="0.25"
         android:background="@drawable/background_dark"
         android:clickable="false"
         android:focusable="false"
@@ -69,9 +69,11 @@
         android:id="@+id/songTitleMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="bottom"
         android:text="@string/song_title"
         android:textColor="@android:color/white"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/spacer"
         app:layout_constraintHorizontal_bias="0.05"
@@ -83,12 +85,13 @@
         android:id="@+id/songDurationMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="top"
         android:text="@string/playing_all_night"
         android:textColor="@android:color/white"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/songTitleMain"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/songTitleMain"
+        app:layout_constraintEnd_toStartOf="@id/spacer"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@id/chevronClick"
         app:layout_constraintTop_toBottomOf="@id/songTitleMain" />
 
     <ImageView
@@ -110,6 +113,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="@string/play"
+        android:onClick="swapPlayPause"
         android:src="@drawable/ic_play_arrow_black_24dp"
         android:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/seekbarLayoutMain"
@@ -133,19 +137,42 @@
         app:layout_constraintTop_toTopOf="@id/playButtonMain"
         app:layout_constraintVertical_bias="0.7" />
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/seekbarLayoutMain"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true" />
 
-    </android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/background"
+            android:contentDescription="@string/volume_indicator"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_volume_up_black_24dp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
+    sothree:umanoDragView="@id/pane_background"
     sothree:umanoPanelHeight="64dp"
-    sothree:umanoShadowHeight="4dp"
-    sothree:umanoScrollableView="@id/horizontalSlider" >
+    sothree:umanoShadowHeight="0dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

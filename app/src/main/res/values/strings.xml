@@ -10,4 +10,11 @@
     <string name="animate">Animate</string>
     <string name="playing_all_night">Playing for a bit</string>
     <string name="sounds">Sounds</string>
+    <string name="blueSongs">Blue Songs</string>
+    <string name="blueDuration">Playing until you\'ve cheered up</string>
+    <string name="greenSongs">Green Songs</string>
+    <string name="greenDuration">Playing until you\'re satisfied</string>
+    <string name="redSongs">Red Songs</string>
+    <string name="redDuration">Playing until you\'ve calmed down</string>
+    <string name="volume_indicator">Volume indicator</string>
 </resources>

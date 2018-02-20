@@ -23,18 +23,21 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
     }
 
     fun updateSongInformation(pos: Int) {
-        layout.songTitleMain.text = when (pos) {
-            0 -> "Blue Songs!"
-            1 -> "Green Songs!"
-            2 -> "Red Songs!"
-            else -> layout.context.resources.getString(R.string.song_title)
+        val resIdTitle = when (pos) {
+            0 -> R.string.blueSongs
+            1 -> R.string.greenSongs
+            2 -> R.string.redSongs
+            else -> R.string.song_title
         }
-        layout.songDurationMain.text = when (pos) {
-            0 -> "Playing until you've cheered up..."
-            1 -> "Playing until you're satisfied..."
-            2 -> "Playing until you've calmed down..."
-            else -> layout.context.resources.getString(R.string.playing_all_night)
+        layout.songTitleMain.setText(resIdTitle)
+
+        val resIdDuration = when (pos) {
+            0 -> R.string.blueDuration
+            1 -> R.string.greenDuration
+            2 -> R.string.redDuration
+            else -> R.string.playing_all_night
         }
+        layout.songDurationMain.setText(resIdDuration)
     }
 
     fun changeSong(view: View) {

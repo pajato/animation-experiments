@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import kotlinx.android.synthetic.main.activity_drawer.view.*
+import kotlinx.android.synthetic.main.content_drawer.view.*
 
 class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Adapter, val layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
@@ -17,8 +17,8 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
         } else {
             (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         }
-        layout.nextMain.visibility = if (newPos == recyclerView.adapter.itemCount - 1) INVISIBLE else VISIBLE
-        layout.previousMain.visibility = if (newPos == 0) INVISIBLE else VISIBLE
+        layout.next.visibility = if (newPos == recyclerView.adapter.itemCount - 1) INVISIBLE else VISIBLE
+        layout.previous.visibility = if (newPos == 0) INVISIBLE else VISIBLE
         updateSongInformation(newPos)
     }
 
@@ -29,7 +29,7 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
             2 -> R.string.redSongs
             else -> R.string.song_title
         }
-        layout.songTitleMain.setText(resIdTitle)
+        layout.songTitle.setText(resIdTitle)
 
         val resIdDuration = when (pos) {
             0 -> R.string.blueDuration
@@ -37,15 +37,15 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
             2 -> R.string.redDuration
             else -> R.string.playing_all_night
         }
-        layout.songDurationMain.setText(resIdDuration)
+        layout.songDuration.setText(resIdDuration)
     }
 
     fun changeSong(view: View) {
         var pos = layoutManager.findFirstCompletelyVisibleItemPosition()
         val smoothScroller = SmoothScroller(layout.context)
         pos = when (view.id) {
-            R.id.nextMain -> pos + 1
-            R.id.previousMain -> pos - 1
+            R.id.next -> pos + 1
+            R.id.previous -> pos - 1
             else -> pos
         }
         smoothScroller.targetPosition = pos

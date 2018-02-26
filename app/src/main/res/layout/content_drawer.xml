@@ -53,10 +53,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/soundsTextMain"
+        android:id="@+id/soundsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0"
+        android:alpha="@dimen/ALPHA_START"
         android:text="@string/sounds"
         android:textColor="@android:color/white"
         android:textSize="18sp"
@@ -66,7 +66,7 @@
         app:layout_constraintTop_toTopOf="@id/pane_background" />
 
     <TextView
-        android:id="@+id/songTitleMain"
+        android:id="@+id/songTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="bottom"
@@ -76,40 +76,40 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/spacer"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="@dimen/TITLE_HORIZONTAL_BIAS_START"
         app:layout_constraintStart_toEndOf="@id/chevronClick"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.017" />
+        app:layout_constraintVertical_bias="@dimen/TITLE_VERTICAL_BIAS_START" />
 
     <TextView
-        android:id="@+id/songDurationMain"
+        android:id="@+id/songDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="top"
         android:text="@string/playing_all_night"
         android:textColor="@android:color/white"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/spacer"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@id/chevronClick"
-        app:layout_constraintTop_toBottomOf="@id/songTitleMain" />
+        app:layout_constraintEnd_toEndOf="@id/songTitle"
+        app:layout_constraintHorizontal_bias="@dimen/DURATION_HORIZONTAL_BIAS_START"
+        app:layout_constraintStart_toStartOf="@id/songTitle"
+        app:layout_constraintTop_toBottomOf="@id/songTitle" />
 
     <ImageView
-        android:id="@+id/previousMain"
+        android:id="@+id/previous"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:alpha="0"
+        android:alpha="@dimen/ALPHA_START"
         android:contentDescription="@string/previous"
         android:onClick="changeSong"
         android:src="@drawable/ic_chevron_left_black_24dp"
         android:tint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
-        app:layout_constraintEnd_toStartOf="@id/playButtonMain"
-        app:layout_constraintTop_toTopOf="@id/playButtonMain"
+        app:layout_constraintBottom_toBottomOf="@id/playButton"
+        app:layout_constraintEnd_toStartOf="@id/playButton"
+        app:layout_constraintTop_toTopOf="@id/playButton"
         app:layout_constraintVertical_bias="0.7" />
 
     <ImageView
-        android:id="@+id/playButtonMain"
+        android:id="@+id/playButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="@string/play"
@@ -118,23 +118,23 @@
         android:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/seekbarLayoutMain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintHorizontal_bias="@dimen/PLAY_HORIZONTAL_BIAS_START"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintVertical_bias="@dimen/PLAY_VERTICAL_BIAS_START" />
 
     <ImageView
-        android:id="@+id/nextMain"
+        android:id="@+id/next"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:alpha="0"
+        android:alpha="@dimen/ALPHA_START"
         android:contentDescription="@string/next"
         android:onClick="changeSong"
         android:src="@drawable/ic_chevron_right_black_24dp"
         android:tint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@id/playButtonMain"
-        app:layout_constraintStart_toEndOf="@id/playButtonMain"
-        app:layout_constraintTop_toTopOf="@id/playButtonMain"
+        app:layout_constraintBottom_toBottomOf="@id/playButton"
+        app:layout_constraintStart_toEndOf="@id/playButton"
+        app:layout_constraintTop_toTopOf="@id/playButton"
         app:layout_constraintVertical_bias="0.7" />
 
     <LinearLayout

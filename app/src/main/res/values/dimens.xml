@@ -35,12 +35,12 @@
     <item name="DURATION_HORIZONTAL_BIAS_END" format="float" type="dimen">0.5</item>
     <!--DURATION_HORIZONTAL_BIAS_SCALE = DURATION_HORIZONTAL_BIAS_END - DURATION_HORIZONTAL_BIAS_START // 0.5f-->
     <item name="DURATION_HORIZONTAL_BIAS_SCALE" format="float" type="dimen">0.5</item>
-    <item name="DURATION_SIZE_START" format="float" type="dimen">14.0</item>
+    <item name="DURATION_SIZE_START" format="float" type="dimen">16.0</item>
     <item name="DURATION_SIZE_END" format="float" type="dimen">18.0</item>
     <!--DURATION_SIZE_SCALE = DURATION_SIZE_END - DURATION_SIZE_START-->
-    <item name="DURATION_SIZE_SCALE" format="float" type="dimen">4.0</item>
+    <item name="DURATION_SIZE_SCALE" format="float" type="dimen">2.0</item>
     <!--DURATION_SIZE_SCALE_COMPACT = DURATION_SIZE_SCALE * 1.5f-->
-    <item name="DURATION_SIZE_SCALE_COMPACT" format="float" type="dimen">6.0</item>
+    <item name="DURATION_SIZE_SCALE_COMPACT" format="float" type="dimen">3.0</item>
 
     <item name="CHEVRON_ROTATION_START" format="float" type="dimen">270.0</item>
     <item name="CHEVRON_ROTATION_END" format="float" type="dimen">450.0</item>

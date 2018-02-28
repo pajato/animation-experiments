@@ -1,14 +1,13 @@
 package com.pajato.drawerreplacement
 
-import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import kotlinx.android.synthetic.main.content_drawer.view.*
+import kotlinx.android.synthetic.main.content_drawer.*
 
-class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Adapter, val layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+class RecyclerViewManager(private val activity: MainActivity, val adapter: Adapter, val layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
     /** Handle setting the visibility of the next and previous buttons. */
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -17,8 +16,8 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
         } else {
             (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         }
-        layout.next.visibility = if (newPos == recyclerView.adapter.itemCount - 1) INVISIBLE else VISIBLE
-        layout.previous.visibility = if (newPos == 0) INVISIBLE else VISIBLE
+        activity.next.visibility = if (newPos == recyclerView.adapter.itemCount - 1) INVISIBLE else VISIBLE
+        activity.previous.visibility = if (newPos == 0) INVISIBLE else VISIBLE
         updateSongInformation(newPos)
     }
 
@@ -29,7 +28,8 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
             2 -> R.string.redSongs
             else -> R.string.song_title
         }
-        layout.songTitle.setText(resIdTitle)
+        activity.songTitle.setText(resIdTitle)
+        activity.invisTitle.setText(resIdTitle)
 
         val resIdDuration = when (pos) {
             0 -> R.string.blueDuration
@@ -37,19 +37,18 @@ class RecyclerViewManager(private val layout: ConstraintLayout, val adapter: Ada
             2 -> R.string.redDuration
             else -> R.string.playing_all_night
         }
-        layout.songDuration.setText(resIdDuration)
+        activity.songDuration.setText(resIdDuration)
     }
 
     fun changeSong(view: View) {
         var pos = layoutManager.findFirstCompletelyVisibleItemPosition()
-        val smoothScroller = SmoothScroller(layout.context)
+        val smoothScroller = SmoothScroller(activity)
         pos = when (view.id) {
             R.id.next -> pos + 1
             R.id.previous -> pos - 1
             else -> pos
         }
         smoothScroller.targetPosition = pos
-        updateSongInformation(pos)
         layoutManager.startSmoothScroll(smoothScroller)
     }
 

@@ -81,6 +81,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="@dimen/TITLE_VERTICAL_BIAS_START" />
 
+    <ImageView
+        android:id="@+id/songTitleBmp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spacer"
+        app:layout_constraintHorizontal_bias="@dimen/TITLE_HORIZONTAL_BIAS_START"
+        app:layout_constraintStart_toEndOf="@id/chevronClick"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="@dimen/TITLE_VERTICAL_BIAS_START" />
+
+    <TextView
+        android:id="@+id/invisTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="@string/greenSongs"
+        android:textColor="@android:color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <TextView
         android:id="@+id/songDuration"
         android:layout_width="wrap_content"
@@ -88,7 +112,7 @@
         android:gravity="top"
         android:text="@string/playing_all_night"
         android:textColor="@android:color/white"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/songTitle"
         app:layout_constraintHorizontal_bias="@dimen/DURATION_HORIZONTAL_BIAS_START"
         app:layout_constraintStart_toStartOf="@id/songTitle"

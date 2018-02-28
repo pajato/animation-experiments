@@ -1,5 +1,6 @@
 package com.pajato.drawerreplacement
 
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -12,22 +13,23 @@ import kotlinx.android.synthetic.main.content_drawer.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListener {
+    private var state: AnimState = AnimState.SMOOTH
     private lateinit var recyclerViewManager: RecyclerViewManager
     private var isPlaying = false
-    private var animateSmooth = true
 
     override fun onPanelSlide(panel: View, slideOffset: Float) {
         // Animate the panel's entrance / exit depending on user choice.
-        if (animateSmooth) {
-            AnimationHelper.splitAnimate(slideOffset, this)
-        } else {
-            AnimationHelper.animate(slideOffset, this)
+        when (state) {
+            AnimState.SMOOTH -> AnimationHelper.splitAnimate(slideOffset, this)
+            AnimState.BITMAP -> AnimationHelper.animate(slideOffset, this, true)
+            AnimState.STUTTER -> AnimationHelper.animate(slideOffset, this)
         }
     }
 
-    override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+    override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState, newState: SlidingUpPanelLayout.PanelState) {
         // Prevent button clicking while the panel is being dragged to help reduce unnecessary anchoring.
         if (newState == SlidingUpPanelLayout.PanelState.DRAGGING) {
+            updateAnimBmps(previousState)
             playButton.isClickable = false
             next.isClickable = false
             previous.isClickable = false
@@ -41,8 +43,10 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         // collapsed state, set all the views to a standard position / size.
         if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
             AnimationHelper.drawerOpen(this)
+            invisTitle.textSize = 16.0f
         } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
             AnimationHelper.drawerClosed(this)
+            invisTitle.textSize = 36.0f
         }
     }
 
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         val helper = PagerSnapHelper()
         horizontalSlider.onFlingListener = null
         helper.attachToRecyclerView(horizontalSlider)
-        recyclerViewManager = RecyclerViewManager(this.mainPanel, adapter, layoutManager)
+        recyclerViewManager = RecyclerViewManager(this, adapter, layoutManager)
         horizontalSlider.addOnScrollListener(recyclerViewManager)
         recyclerViewManager.updateSongInformation(0)
     }
@@ -78,15 +82,19 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         recyclerViewManager.changeSong(view)
     }
 
-    /** Two buttons, smoothAnimButton and stutterAnimButton control which choice the user wants for their animation. */
+    /** Three buttons control which choice the user wants for their animation. */
     fun changeState(view: View) {
         when (view.id) {
             R.id.smoothAnimButton -> {
-                this.animateSmooth = true
+                this.state = AnimState.SMOOTH
                 this.animStyleText.setText(R.string.smoother)
             }
+            R.id.bitmapAnimButton -> {
+                this.state = AnimState.BITMAP
+                this.animStyleText.setText(R.string.bitmap)
+            }
             R.id.stutterAnimButton -> {
-                this.animateSmooth = false
+                this.state = AnimState.STUTTER
                 this.animStyleText.setText(R.string.as_spec)
             }
         }
@@ -104,5 +112,32 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         this.resources.getValue(resId, outValue, true)
         val float = outValue.float
         return float
+    }
+
+    fun updateAnimBmps(previousState: SlidingUpPanelLayout.PanelState) {
+        // When the panel is expanded, invisible title will be small and displayed will be large.
+        // We rebuild the drawing cache to update BMPs when the text changes.
+        if (previousState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            invisTitle.destroyDrawingCache()
+            invisTitle.buildDrawingCache()
+            songTitle.destroyDrawingCache()
+            songTitle.buildDrawingCache()
+            AnimationHelper.setTitleBmps(songTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true),
+                    invisTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true))
+            // When the panel is collapsed, invisible title will be large and displayed will be small.
+        } else if (previousState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            invisTitle.destroyDrawingCache()
+            invisTitle.buildDrawingCache()
+            songTitle.destroyDrawingCache()
+            songTitle.buildDrawingCache()
+            AnimationHelper.setTitleBmps(songTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true),
+                    invisTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true))
+        }
+    }
+
+    enum class AnimState {
+        SMOOTH,
+        BITMAP,
+        STUTTER
     }
 }

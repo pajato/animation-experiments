@@ -47,6 +47,10 @@ object AnimationHelper {
     private var isClosing = false
     private var durationConnectedToText = true
 
+    /**
+     * Update the Title Bitmaps. The startBitmap should be the current TextView's drawable, and the
+     * endBitmap should come from a TextView that emulates its desired result.
+     */
     fun setTitleBmps(startBitmap: Bitmap?, endBitmap: Bitmap?) {
         if (startBitmap != null && endBitmap != null) {
             this.titleBmpStart = startBitmap
@@ -54,6 +58,9 @@ object AnimationHelper {
 
             isClosing = titleBmpStart.width < titleBmpEnd.width
 
+            // Enforce consistent Bitmap sizing. See scaleTextViewWithBitmap. You could use startHeight,
+            // endWidth, etc and differentiate later, but it was harder to track and more calculations
+            // in frequently-called animation methods, as opposed to here which is called less frequently.
             if (isClosing) {
                 this.smallHeight = titleBmpStart.height
                 this.smallWidth = titleBmpStart.width
@@ -100,7 +107,10 @@ object AnimationHelper {
         }
     }
 
-    /** The "standard" animate method that causes stuttering in the TextViews due to constant resizing. */
+    /**
+     * The "standard" animate method. An optional boolean flag can specify text animation being
+     * done by resizing a bitmap or using textSize.
+     */
     fun animate(slideOffset: Float, mainActivity: MainActivity, useBitmap: Boolean = false) {
         // Because we use ConstraintLayout.LayoutParams to move Next/Previous, and they are altered
         // when we apply ConstraintSets, we need to apply Constraints first and do LayoutParams after.
@@ -159,7 +169,7 @@ object AnimationHelper {
             mainActivity.songTitleBmp.visibility = View.INVISIBLE
     }
 
-    /** Scaling by TextSize causes stuttering, so this method is not recommended to use. */
+    /** Scaling by TextSize causes stuttering, so this method is not recommended. */
     private fun scaleTextView(slideOffset: Float, mainActivity: MainActivity) {
         val titleSp = TITLE_SIZE_START + (slideOffset * TITLE_SIZE_SCALE)
         mainActivity.songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSp)
@@ -167,6 +177,7 @@ object AnimationHelper {
 
     /** Instead of resizing the text using textSize, we resize bitmap images for a smoother animation. */
     private fun scaleTextViewWithBitmap(slideOffset: Float, mainActivity: MainActivity) {
+        // Ensure the TextView is invisible and the Bitmap ImageView is visible.
         mainActivity.songTitle.visibility = View.INVISIBLE
         val songTitleBmp = mainActivity.songTitleBmp
         songTitleBmp.visibility = View.VISIBLE
@@ -180,6 +191,9 @@ object AnimationHelper {
 
         songTitleBmp.layoutParams.width = smallWidth + ((largeWidth - smallWidth) * slideOffset).toInt()
         songTitleBmp.layoutParams.height = smallHeight + ((largeHeight - smallHeight) * slideOffset).toInt()
+
+        // Because changing constraints programmatically requires creation of ConstraintSets, we
+        // want to do it as infrequently as possible. A flag is more barbaric, but more efficient.
         if (durationConnectedToText)
             connectDuration(mainActivity, true)
     }
@@ -249,8 +263,10 @@ object AnimationHelper {
         params.height = side
     }
 
-    /** Because we use an ImageView for the bitmap animation strategy, we need to change songDuration's
-     * constraints to either the bitmap or the TextView depending on the strategy chosen. */
+    /**
+     * Because we use an ImageView for the bitmap animation strategy, we need to change songDuration's
+     * constraints to either the bitmap or the TextView depending on the strategy chosen.
+     */
     private fun connectDuration(mainActivity: MainActivity, toBmp: Boolean = false) {
         val cs = ConstraintSet()
         val connection = if (toBmp) R.id.songTitleBmp else R.id.songTitle

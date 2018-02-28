@@ -102,14 +102,16 @@ object AnimationHelper {
 
     /** The "standard" animate method that causes stuttering in the TextViews due to constant resizing. */
     fun animate(slideOffset: Float, mainActivity: MainActivity, useBitmap: Boolean = false) {
+        // Because we use ConstraintLayout.LayoutParams to move Next/Previous, and they are altered
+        // when we apply ConstraintSets, we need to apply Constraints first and do LayoutParams after.
         slideViewsUsingConstraintBias(slideOffset, mainActivity)
-        fadeAndSlideNextPrevious(slideOffset, mainActivity)
-        scalePlayButton(slideOffset, mainActivity)
         if (useBitmap) {
             scaleTextViewWithBitmap(slideOffset, mainActivity)
         } else {
             scaleTextView(slideOffset, mainActivity)
         }
+        fadeAndSlideNextPrevious(slideOffset, mainActivity)
+        scalePlayButton(slideOffset, mainActivity)
 
         mainActivity.soundsText.alpha = slideOffset
         mainActivity.chevronClick.rotation = CHEVRON_ROTATION_START + (CHEVRON_ROTATION_SCALE * slideOffset)

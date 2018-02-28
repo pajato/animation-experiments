@@ -19,4 +19,5 @@
     <string name="volume_indicator">Volume indicator</string>
     <string name="as_spec">As Spec</string>
     <string name="smoother">Smoother</string>
+    <string name="bitmap">Bitmap</string>
 </resources>

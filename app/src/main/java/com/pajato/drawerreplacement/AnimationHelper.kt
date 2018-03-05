@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import com.pajato.drawerreplacement.Dimens.ALPHA_END
 import com.pajato.drawerreplacement.Dimens.ALPHA_START
 import com.pajato.drawerreplacement.Dimens.CHEVRON_ROTATION_END
@@ -13,9 +15,6 @@ import com.pajato.drawerreplacement.Dimens.CHEVRON_ROTATION_SCALE
 import com.pajato.drawerreplacement.Dimens.CHEVRON_ROTATION_START
 import com.pajato.drawerreplacement.Dimens.DURATION_HORIZONTAL_BIAS_SCALE
 import com.pajato.drawerreplacement.Dimens.DURATION_HORIZONTAL_BIAS_START
-import com.pajato.drawerreplacement.Dimens.DURATION_SIZE_END
-import com.pajato.drawerreplacement.Dimens.DURATION_SIZE_SCALE_COMPACT
-import com.pajato.drawerreplacement.Dimens.DURATION_SIZE_START
 import com.pajato.drawerreplacement.Dimens.PLAY_HORIZONTAL_BIAS_SCALE
 import com.pajato.drawerreplacement.Dimens.PLAY_HORIZONTAL_BIAS_START
 import com.pajato.drawerreplacement.Dimens.PLAY_SIDE_DP_SCALE
@@ -24,14 +23,9 @@ import com.pajato.drawerreplacement.Dimens.PLAY_VERTICAL_BIAS_SCALE
 import com.pajato.drawerreplacement.Dimens.PLAY_VERTICAL_BIAS_START
 import com.pajato.drawerreplacement.Dimens.SLIDE_OFFSET_COLLAPSED
 import com.pajato.drawerreplacement.Dimens.SLIDE_OFFSET_EXPANDED
-import com.pajato.drawerreplacement.Dimens.SPLIT_SCALE
-import com.pajato.drawerreplacement.Dimens.SPLIT_SLIDE_START
-import com.pajato.drawerreplacement.Dimens.SPLIT_TEXT_END
 import com.pajato.drawerreplacement.Dimens.TITLE_HORIZONTAL_BIAS_SCALE
 import com.pajato.drawerreplacement.Dimens.TITLE_HORIZONTAL_BIAS_START
 import com.pajato.drawerreplacement.Dimens.TITLE_SIZE_END
-import com.pajato.drawerreplacement.Dimens.TITLE_SIZE_SCALE
-import com.pajato.drawerreplacement.Dimens.TITLE_SIZE_SCALE_COMPACT
 import com.pajato.drawerreplacement.Dimens.TITLE_SIZE_START
 import com.pajato.drawerreplacement.Dimens.TITLE_VERTICAL_BIAS_SCALE
 import com.pajato.drawerreplacement.Dimens.TITLE_VERTICAL_BIAS_START
@@ -44,7 +38,7 @@ object AnimationHelper {
     private var smallWidth = 0
     private var largeHeight = 0
     private var largeWidth = 0
-    private var isClosing = false
+    private var isOpening = false
     private var durationConnectedToText = true
 
     /**
@@ -56,12 +50,12 @@ object AnimationHelper {
             this.titleBmpStart = startBitmap
             this.titleBmpEnd = endBitmap
 
-            isClosing = titleBmpStart.width < titleBmpEnd.width
+            isOpening = titleBmpStart.width < titleBmpEnd.width
 
             // Enforce consistent Bitmap sizing. See scaleTextViewWithBitmap. You could use startHeight,
             // endWidth, etc and differentiate later, but it was harder to track and more calculations
             // in frequently-called animation methods, as opposed to here which is called less frequently.
-            if (isClosing) {
+            if (isOpening) {
                 this.smallHeight = titleBmpStart.height
                 this.smallWidth = titleBmpStart.width
                 this.largeHeight = titleBmpEnd.height
@@ -76,50 +70,14 @@ object AnimationHelper {
     }
 
     /**
-     * An animation method that splits the text sizing and the shifting and fading of the layouts
-     * into two discrete chunks with two discrete scales.
-     */
-    fun splitAnimate(slideOffset: Float, mainActivity: MainActivity) {
-        mainActivity.chevronClick.rotation = CHEVRON_ROTATION_START + (CHEVRON_ROTATION_SCALE * slideOffset)
-        // Handle scaling the TextViews. They should be their full size well before the slide offset hits 1.0
-        if (slideOffset < SPLIT_TEXT_END) {
-            val tmpOffset = slideOffset * SPLIT_SCALE
-            compactScaleTextViews(tmpOffset, mainActivity)
-        } else {
-            mainActivity.songTitle.textSize = TITLE_SIZE_END
-            mainActivity.songDuration.textSize = DURATION_SIZE_END
-        }
-
-        // Begin sliding views to their appropriate positions once we have entered the correct range
-        if (slideOffset > SPLIT_SLIDE_START) {
-            val tmpOffset = (slideOffset - SPLIT_SLIDE_START) * SPLIT_SCALE
-
-            slideViewsUsingConstraintBias(tmpOffset, mainActivity)
-            fadeAndSlideNextPrevious(tmpOffset, mainActivity)
-            scalePlayButton(slideOffset, mainActivity)
-
-            mainActivity.soundsText.alpha = tmpOffset
-        } else {
-            // If we haven't entered the appropriate range, lock non-text views in place.
-            slideViewsUsingConstraintBias(0.0f, mainActivity)
-            fadeAndSlideNextPrevious(0.0f, mainActivity)
-            scalePlayButton(0.0f, mainActivity)
-        }
-    }
-
-    /**
      * The "standard" animate method. An optional boolean flag can specify text animation being
      * done by resizing a bitmap or using textSize.
      */
-    fun animate(slideOffset: Float, mainActivity: MainActivity, useBitmap: Boolean = false) {
+    fun animate(slideOffset: Float, mainActivity: MainActivity) {
         // Because we use ConstraintLayout.LayoutParams to move Next/Previous, and they are altered
         // when we apply ConstraintSets, we need to apply Constraints first and do LayoutParams after.
         slideViewsUsingConstraintBias(slideOffset, mainActivity)
-        if (useBitmap) {
-            scaleTextViewWithBitmap(slideOffset, mainActivity)
-        } else {
-            scaleTextView(slideOffset, mainActivity)
-        }
+        scaleTextViewWithBitmap(slideOffset, mainActivity)
         fadeAndSlideNextPrevious(slideOffset, mainActivity)
         scalePlayButton(slideOffset, mainActivity)
 
@@ -169,12 +127,6 @@ object AnimationHelper {
             mainActivity.songTitleBmp.visibility = View.INVISIBLE
     }
 
-    /** Scaling by TextSize causes stuttering, so this method is not recommended. */
-    private fun scaleTextView(slideOffset: Float, mainActivity: MainActivity) {
-        val titleSp = TITLE_SIZE_START + (slideOffset * TITLE_SIZE_SCALE)
-        mainActivity.songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSp)
-    }
-
     /** Instead of resizing the text using textSize, we resize bitmap images for a smoother animation. */
     private fun scaleTextViewWithBitmap(slideOffset: Float, mainActivity: MainActivity) {
         // Ensure the TextView is invisible and the Bitmap ImageView is visible.
@@ -182,43 +134,28 @@ object AnimationHelper {
         val songTitleBmp = mainActivity.songTitleBmp
         songTitleBmp.visibility = View.VISIBLE
 
-        // Use the smaller drawable when close to the "smaller" side of the animation to avoid a "settle" when it is replaced by text.
-        if (isClosing) {
-            songTitleBmp.setImageBitmap(if (slideOffset > 0.8f) this.titleBmpStart else this.titleBmpEnd)
-        } else {
+        // Wait to swap bitmaps to avoid kerning errors. Use the larger bitmap the majority of the time to avoid pixelation.
+        if (isOpening) {
             songTitleBmp.setImageBitmap(if (slideOffset < 0.2f) this.titleBmpStart else this.titleBmpEnd)
+        } else {
+            songTitleBmp.setImageBitmap(if (slideOffset > 0.2f) this.titleBmpStart else this.titleBmpEnd)
         }
 
-        songTitleBmp.layoutParams.width = smallWidth + ((largeWidth - smallWidth) * slideOffset).toInt()
-        songTitleBmp.layoutParams.height = smallHeight + ((largeHeight - smallHeight) * slideOffset).toInt()
+        // Towards the start / end of the slide animation, set the size to WRAP_CONTENT to avoid resizing hiccups.
+        val tmpOffset = -0.05f + (slideOffset / 0.90f)
+        if (tmpOffset <= 0.01f || tmpOffset >= 0.99f) {
+            songTitleBmp.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            songTitleBmp.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } else {
+            songTitleBmp.layoutParams.width = smallWidth + ((largeWidth - smallWidth) * tmpOffset).toInt()
+            songTitleBmp.layoutParams.height = smallHeight + ((largeHeight - smallHeight) * tmpOffset).toInt()
+        }
+
 
         // Because changing constraints programmatically requires creation of ConstraintSets, we
         // want to do it as infrequently as possible. A flag is more barbaric, but more efficient.
         if (durationConnectedToText)
             connectDuration(mainActivity, true)
-    }
-
-    /** Increase the songDurationMain and songTitleMain TextViews size. */
-    private fun compactScaleTextViews(slideOffset: Float, mainActivity: MainActivity) {
-        // Increase the text sizes, fade in the "Sounds" textview and rotate the chevron.
-        // Ensure that the text size changes occurs more towards the center of the slide to allow for smoother transitions.
-        // The commented code is to illustrate what occurs between 0.2 and 0.8 in the slide offset.
-        // val durationSp = 14.0f + (slideOffset * 4.0f)
-        var durationSp = DURATION_SIZE_START + ((slideOffset - 0.2f) * DURATION_SIZE_SCALE_COMPACT)
-        durationSp = when {
-            durationSp < DURATION_SIZE_START -> DURATION_SIZE_START
-            durationSp > DURATION_SIZE_END -> DURATION_SIZE_END
-            else -> durationSp
-        }
-        mainActivity.songDuration.setTextSize(TypedValue.COMPLEX_UNIT_SP, durationSp)
-        // val titleSp = 16.0f + (slideOffset * 20.0f)
-        var titleSp = TITLE_SIZE_START + ((slideOffset - 0.2f) * TITLE_SIZE_SCALE_COMPACT)
-        titleSp = when {
-            titleSp < TITLE_SIZE_START -> TITLE_SIZE_START
-            titleSp > TITLE_SIZE_END -> TITLE_SIZE_END
-            else -> titleSp
-        }
-        mainActivity.songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSp)
     }
 
     /** Slide the playButtonMain, songTitleMain, and songDurationMain using horizontal and vertical constraint bias. */

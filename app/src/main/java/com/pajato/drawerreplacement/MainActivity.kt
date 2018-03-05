@@ -10,20 +10,14 @@ import android.view.View
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_drawer.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListener {
-    private var state: AnimState = AnimState.SMOOTH
     private lateinit var recyclerViewManager: RecyclerViewManager
     private var isPlaying = false
 
     override fun onPanelSlide(panel: View, slideOffset: Float) {
         // Animate the panel's entrance / exit depending on user choice.
-        when (state) {
-            AnimState.SMOOTH -> AnimationHelper.splitAnimate(slideOffset, this)
-            AnimState.BITMAP -> AnimationHelper.animate(slideOffset, this, true)
-            AnimState.STUTTER -> AnimationHelper.animate(slideOffset, this)
-        }
+        AnimationHelper.animate(slideOffset, this)
     }
 
     override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState, newState: SlidingUpPanelLayout.PanelState) {
@@ -82,24 +76,6 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
         recyclerViewManager.changeSong(view)
     }
 
-    /** Three buttons control which choice the user wants for their animation. */
-    fun changeState(view: View) {
-        when (view.id) {
-            R.id.smoothAnimButton -> {
-                this.state = AnimState.SMOOTH
-                this.animStyleText.setText(R.string.smoother)
-            }
-            R.id.bitmapAnimButton -> {
-                this.state = AnimState.BITMAP
-                this.animStyleText.setText(R.string.bitmap)
-            }
-            R.id.stutterAnimButton -> {
-                this.state = AnimState.STUTTER
-                this.animStyleText.setText(R.string.as_spec)
-            }
-        }
-    }
-
     fun swapPlayPause(view: View) {
         if (view.id == playButton.id) {
             playButton.setImageResource(if (isPlaying) R.drawable.ic_play_arrow_black_24dp else R.drawable.ic_pause_black_24dp)
@@ -110,11 +86,10 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
     fun getDimen(resId: Int): Float {
         val outValue = TypedValue()
         this.resources.getValue(resId, outValue, true)
-        val float = outValue.float
-        return float
+        return outValue.float
     }
 
-    fun updateAnimBmps(previousState: SlidingUpPanelLayout.PanelState) {
+    private fun updateAnimBmps(previousState: SlidingUpPanelLayout.PanelState) {
         // When the panel is expanded, invisible title will be small and displayed will be large.
         // We rebuild the drawing cache to update BMPs when the text changes.
         if (previousState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -133,11 +108,5 @@ class MainActivity : AppCompatActivity(), SlidingUpPanelLayout.PanelSlideListene
             AnimationHelper.setTitleBmps(songTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true),
                     invisTitle?.drawingCache?.copy(Bitmap.Config.ARGB_8888, true))
         }
-    }
-
-    enum class AnimState {
-        SMOOTH,
-        BITMAP,
-        STUTTER
     }
 }

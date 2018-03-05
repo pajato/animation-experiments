@@ -20,7 +20,7 @@
         android:id="@+id/animStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/smoother"
+        android:text="@string/bitmap"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,33 +34,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mainContentText" />
-
-    <Button
-        android:id="@+id/stutterAnimButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="changeState"
-        android:text="@string/as_spec"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/bitmapAnimButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="changeState"
-        android:text="@string/bitmap"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/smoothAnimButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="changeState"
-        android:text="@string/smoother"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
